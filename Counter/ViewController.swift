@@ -8,21 +8,52 @@
 import UIKit
 
 class ViewController: UIViewController {
-    var bookCounter: Int = 0
+    var bookCounter: Int {
+        get {
+            return
+            UserDefaults.standard.integer(forKey: "finalValue")
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "finalValue")
+        }
+    }
     @IBAction func removeBook(_ sender: Any) {
         if bookCounter > 0 {
             bookCounter -= 1
             updateCounterLabel()
             let dateTimeString = dateAndTime()
-            let currentText = history.text
-            let newText = currentText! + "\n" + dateTimeString + " значение изменено на -1"
+            
+            var oldHistoryText: String {
+                get {
+                    UserDefaults.standard.string(forKey: "history") ?? ""
+                }
+                set {
+                    UserDefaults.standard.set(newValue, forKey: "history")
+                }
+            }
+            let currentText = oldHistoryText + "\n" + history.text
+            let newText = currentText + "\n" + dateTimeString + " значение изменено на -1"
             history.text = newText
+            oldHistoryText = newText
+            
+            
         }
         else {
             let dateTimeString = dateAndTime()
-            let currentText = history.text
-            let newText = currentText! + "\n" + dateTimeString + " попытка уменьшить значение счётчика ниже 0"
+            
+            var oldHistoryText: String {
+                get {
+                    UserDefaults.standard.string(forKey: "history") ?? ""
+                }
+                set {
+                    UserDefaults.standard.set(newValue, forKey: "history")
+                }
+            }
+            let currentText = oldHistoryText + "\n" + history.text
+            let newText = currentText + "\n" + dateTimeString + " попытка уменьшить значение счётчика ниже 0"
             history.text = newText
+            oldHistoryText = newText
+            
         }
         
     }
@@ -30,18 +61,36 @@ class ViewController: UIViewController {
         bookCounter += 1
         updateCounterLabel()
         let dateTimeString = dateAndTime()
-        let currentText = history.text
-        let newText = currentText! + "\n" + dateTimeString + " значение изменено на +1"
+        var oldHistoryText: String {
+            get {
+                UserDefaults.standard.string(forKey: "history") ?? ""
+            }
+            set {
+                UserDefaults.standard.set(newValue, forKey: "history")
+            }
+        }
+        let currentText = oldHistoryText + "\n" + history.text
+        let newText = currentText + "\n" + dateTimeString + " значение изменено на +1"
         history.text = newText
+        oldHistoryText = newText
         
     }
     @IBAction func reset(_ sender: Any) {
         bookCounter = 0
         updateCounterLabel()
         let dateTimeString = dateAndTime()
-        let currentText = history.text
-        let newText = currentText! + "\n" + dateTimeString + " значение сброшено"
+        var oldHistoryText: String {
+            get {
+                UserDefaults.standard.string(forKey: "history") ?? ""
+            }
+            set {
+                UserDefaults.standard.set(newValue, forKey: "history")
+            }
+        }
+        let currentText = oldHistoryText + "\n" + history.text
+        let newText = currentText + "\n" + dateTimeString + " значение сброшено"
         history.text = newText
+        oldHistoryText = newText
     }
    
     func dateAndTime()-> String {
@@ -55,6 +104,9 @@ class ViewController: UIViewController {
     func updateCounterLabel() {
         counter.text = "Значение счетчика: \(bookCounter)"
         }
+    func updateHistory() {
+        history.text = UserDefaults.standard.string(forKey: "history") ?? ""
+    }
     
     @IBOutlet weak var counterButton: UIButton!
     @IBOutlet weak var history: UITextView!
@@ -62,8 +114,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        let finalValue = bookCounter
+        if finalValue == 0 {
+            bookCounter = 0
+        }
+        updateCounterLabel()
+        updateHistory()
     }
-
-
 }
-
