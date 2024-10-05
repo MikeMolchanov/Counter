@@ -10,27 +10,26 @@ import UIKit
 class ViewController: UIViewController {
     var bookCounter: Int {
         get {
-            return
             UserDefaults.standard.integer(forKey: "finalValue")
         }
         set {
             UserDefaults.standard.set(newValue, forKey: "finalValue")
         }
     }
+    var oldHistoryText: String {
+        get {
+            UserDefaults.standard.string(forKey: "history") ?? ""
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "history")
+        }
+    }
+    
     @IBAction func removeBook(_ sender: Any) {
         if bookCounter > 0 {
             bookCounter -= 1
             updateCounterLabel()
             let dateTimeString = dateAndTime()
-            
-            var oldHistoryText: String {
-                get {
-                    UserDefaults.standard.string(forKey: "history") ?? ""
-                }
-                set {
-                    UserDefaults.standard.set(newValue, forKey: "history")
-                }
-            }
             let currentText = oldHistoryText + "\n" + history.text
             let newText = currentText + "\n" + dateTimeString + " значение изменено на -1"
             history.text = newText
@@ -40,15 +39,6 @@ class ViewController: UIViewController {
         }
         else {
             let dateTimeString = dateAndTime()
-            
-            var oldHistoryText: String {
-                get {
-                    UserDefaults.standard.string(forKey: "history") ?? ""
-                }
-                set {
-                    UserDefaults.standard.set(newValue, forKey: "history")
-                }
-            }
             let currentText = oldHistoryText + "\n" + history.text
             let newText = currentText + "\n" + dateTimeString + " попытка уменьшить значение счётчика ниже 0"
             history.text = newText
@@ -61,14 +51,6 @@ class ViewController: UIViewController {
         bookCounter += 1
         updateCounterLabel()
         let dateTimeString = dateAndTime()
-        var oldHistoryText: String {
-            get {
-                UserDefaults.standard.string(forKey: "history") ?? ""
-            }
-            set {
-                UserDefaults.standard.set(newValue, forKey: "history")
-            }
-        }
         let currentText = oldHistoryText + "\n" + history.text
         let newText = currentText + "\n" + dateTimeString + " значение изменено на +1"
         history.text = newText
@@ -79,14 +61,6 @@ class ViewController: UIViewController {
         bookCounter = 0
         updateCounterLabel()
         let dateTimeString = dateAndTime()
-        var oldHistoryText: String {
-            get {
-                UserDefaults.standard.string(forKey: "history") ?? ""
-            }
-            set {
-                UserDefaults.standard.set(newValue, forKey: "history")
-            }
-        }
         let currentText = oldHistoryText + "\n" + history.text
         let newText = currentText + "\n" + dateTimeString + " значение сброшено"
         history.text = newText
